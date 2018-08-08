@@ -17,6 +17,9 @@ export class NavigationBar extends Component {
                         <li className="nav-item active">
                             <Link className="nav-link" to="/signup">Sign Up</Link>
                         </li>
+                        <li className="nav-item active">
+                            <Link className="nav-link" to="/login">Sign In</Link>
+                        </li>
                         
             
                     </ul>

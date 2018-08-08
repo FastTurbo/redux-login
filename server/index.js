@@ -5,7 +5,7 @@ import bodyParser from 'body-parser'
 let app = express()
 
 app.use(bodyParser.json())
-app.use('/api/signup', users)
+app.use('/api/users', users)
 
 app.get('/', (req, res) => {
     res.send('hello redux!')
