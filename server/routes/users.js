@@ -14,7 +14,7 @@ const validateInput = data => {
         errors.email = 'The field is required'
     }
 
-    if (validator.isEmail(data.email)) {
+    if (!validator.isEmail(data.email)) {
         errors.email = 'Email is valid'
     }
 
@@ -39,10 +39,14 @@ const validateInput = data => {
 
 router.post('/', (req, res) => {
     const { errors, isValid } = validateInput(req.body)
-
-    if(!isValid){
-        res.status(400).json(errors)
-    }
+    setTimeout(() => {
+        if (!isValid) {
+            res.status(400).json(errors)
+        }else{
+            res.status(200).json({msg:'success'})
+        }
+    },2000)
+    
 })
 
 export default router

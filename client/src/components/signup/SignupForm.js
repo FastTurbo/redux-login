@@ -1,14 +1,23 @@
 import React, { Component } from 'react'
 import classnames from 'classnames'
+import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 
 export class SignupForm extends Component {
+
     state = {
-        username:'',
-        email:'',
-        password:'',
-        passwordConfirmation:'',
-        errors:{}
+        username: '',
+        email: '',
+        password: '',
+        passwordConfirmation: '',
+        errors: {},
+        isLoading: false
     }
+
+    static contextTypes = {
+        router: PropTypes.object,
+    }
+    
 
     onChange = e => {
         this.setState({[e.target.name] : e.target.value })
@@ -16,10 +25,23 @@ export class SignupForm extends Component {
 
     handleSubmit = e => {
         e.preventDefault()
-        this.setState({ errors:{} })
+        this.setState({ errors:{}, isLoading:true })
         this.props.userSignupRequest(this.state)
-        .then(() => {},
-        ({response}) => { this.setState({ errors: response.data })})
+        .then(() => {
+            console.log(this.props)
+            //只有Route指向的组件才能有history属性
+            this.setState({ isLoading: false})
+            //1 history()方法跳转,从Route指向的父级组件传递过来
+            //2 使用withRouter() 高阶组件将组件包住，可自动使用history属性
+            //3 使用context.router.history()跳转
+            this.props.addFlashMessage({
+                type:'success',
+                text:'You signed up successfully, welcome.'
+            })
+            this.props.history.push('/')
+            //this.context.router.history.push('/')
+        },
+        ({response}) => { this.setState({ errors: response.data, isLoading: false })})
 
         console.log(this.state)
     }
@@ -73,11 +95,12 @@ export class SignupForm extends Component {
              { errors.passwordConfirmation && <span className="form-text text-muted">{ errors.passwordConfirmation }</span>}
         </div>
         <div className="form-group">
-            <button className="btn btn-primary btn-lg">Sign Up</button>
+            <button disabled={ this.state.isLoading } className="btn btn-primary btn-lg">Sign Up</button>
         </div>
       </form>
     )
   }
 }
 
-export default SignupForm
+export default withRouter(SignupForm)
+//export default SignupForm
