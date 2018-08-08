@@ -17,6 +17,11 @@ export default function(ComposedComponent){
                 this.context.router.history.push('/login')
             }
         }
+        componentWillUpdate(nextProps){
+            if(!nextProps.isAuthenticated){
+                this.context.router.history.push('/login')
+            }
+        }
         render(){
             return (
                 <ComposedComponent {...this.props}/>    
