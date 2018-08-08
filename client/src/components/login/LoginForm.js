@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import classnames from 'classnames'
 import validateInput from '../../utils/validations/login';
+import { connect } from 'react-redux'
+import { login } from '../../actions/loginAction'
+import PropTypes from 'prop-types'
 
 export class LoginForm extends Component {
     state = {
@@ -8,6 +11,10 @@ export class LoginForm extends Component {
         password:'',
         errors:{},
         isLoading:false
+    }
+
+    static contextTypes = {
+        router:PropTypes.object,
     }
 
     onChange = e => {
@@ -26,7 +33,14 @@ export class LoginForm extends Component {
     handleSubmit = e => {
         e.preventDefault()
         if(this.isValid()){
-
+            this.setState({ errors:{}, isLoading:false})
+            this.props.login(this.state)
+            .then(
+                res => {
+                    this.context.router.history.push('/')
+                },
+                err => this.setState({ errors: err.response.data.errors, isLoading: false })
+            )
         }
     }
   render() {
@@ -34,6 +48,7 @@ export class LoginForm extends Component {
     return (
       <form onSubmit={ this.handleSubmit }>
         <h1>Login</h1>
+        { errors.form && <div className="alert alert-danger">{ errors.form }</div>}
         <div className="form-group">
             <label className="control-label">Username / Email </label>
 
@@ -58,11 +73,11 @@ export class LoginForm extends Component {
              { errors.password && <span className="form-text text-muted">{ errors.password }</span>}
         </div>
         <div className="form-group">
-            <button disabled={ this.state.isLoading || this.state.invalid } className="btn btn-primary btn-lg">Sign In</button>
+            <button disabled={ isLoading || this.state.invalid } className="btn btn-primary btn-lg">Sign In</button>
         </div>
       </form>
     )
   }
 }
 
-export default LoginForm
+export default connect(null,{ login })(LoginForm)

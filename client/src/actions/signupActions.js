@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '_axios@0.18.0@axios'
 
 export const userSignupRequest = user => {
     return dispatch => {

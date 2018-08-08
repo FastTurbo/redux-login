@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import LoginForm from './LoginForm'
 
 export class LoginPage extends Component {
-  static propTypes = {
-
-  }
+  
 
   render() {
     return (
