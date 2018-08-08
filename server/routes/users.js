@@ -14,12 +14,21 @@ const validateInput = data => {
         errors.email = 'The field is required'
     }
 
+    if (validator.isEmail(data.email)) {
+        errors.email = 'Email is valid'
+    }
+
     if (validator.isEmpty(data.password)) {
         errors.password = 'The field is required'
     }
 
     if (validator.isEmpty(data.passwordConfirmation)) {
         errors.passwordConfirmation = 'The field is required'
+    }
+
+
+    if(!validator.equals(data.password, data.passwordConfirmation)){
+        errors.passwordConfirmation = 'Password must match.'
     }
 
     return {
